@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.generated.TunerConstants;
 import frc.robot.commands.*;
@@ -40,6 +41,10 @@ public class RobotContainer {
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   public Trigger driverY = new Trigger(()->xbox2.getYButton());
+  public Trigger driverA = new Trigger(()->xbox2.getAButton());
+  public Trigger driverB = new Trigger(()->xbox2.getBButton());
+
+
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -60,7 +65,10 @@ public class RobotContainer {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
-    driverY.onTrue(new ArmPos(manipulator, 15));
+    driverY.whileTrue(new ArmPos(manipulator, 15));
+    driverA.whileTrue(new armManual(manipulator, 0.2));
+    driverB.whileTrue(new armManual(manipulator, -0.2));
+    
 
   }
 
